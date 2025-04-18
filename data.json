@@ -1,0 +1,59 @@
+[
+    {
+        "questions": [
+            "Qu’est-ce que le service E-TAYSIR ?",
+            "C’est quoi le service E-TAYSIR ?",
+            "Pouvez-vous m’expliquer ce qu’est E-TAYSIR ?",
+            "E-TAYSIR ?"
+        ],
+        "answer": "E-TAYSIR est un service de financement à la consommation 100% en ligne, sans apport personnel, proposé par Al Salam Bank Algeria."
+    },
+    {
+        "questions": [
+            "Quels types de produits peut-on acheter avec E-TAYSIR ?",
+            "je peux acheter quoi exactement ?",
+            "Quels articles peut-on financer via E-TAYSIR ?"
+        ],
+        "answer": "Vous pouvez acheter des équipements électroménagers, du mobilier de maison et d'autres produits proposés par les partenaires."
+    },
+    {
+        "questions": [
+            "Quelles sont les conditions pour bénéficier du service ?",
+            "Pour qui E-TAYSIR est-il accessible ?",
+            "Quelles sont les conditions ?"
+        ],
+        "answer": "Il faut avoir entre 19 et 75 ans, un revenu stable domicilié auprès d’Algérie Poste ou Al Salam Bank, et un salaire minimum de 25 000 DA."
+    },
+    {
+        "questions": [
+            "Puis-je choisir la durée de remboursement ?",
+            "Est-il possible de choisir la durée de remboursement avec E-TAYSIR ?"
+        ],
+        "answer": "Oui, entre 12 et 60 mois."
+    },
+    {
+        "questions": [
+            "Comment faire une demande de financement E-TAYSIR ?",
+            "Comment procéder pour obtenir un financement via E-TAYSIR ?",
+            "Quelles sont les étapes à suivre pour faire une demande de financement E-TAYSIR ?",
+            "Quelle est la procédure pour E-TAYSIR ?"
+        ],
+        "answer": "Inscrivez-vous sur une plateforme partenaire :\n- Diar Dzair (www.diardzair.dz)\n- ACM (www.taksit.dz)\n- EkiClik (www.alsalamalgeria.ekiclik.dz)\n- Savitem (www.savitem.dz)\nSélectionnez vos produits, passez commande et soumettez votre dossier."
+    },
+    {
+        "questions": [
+            "Où puis-je m’inscrire pour bénéficier du service ?",
+            "Où faut-il aller pour s’inscrire à E-TAYSIR ?",
+            "Comment et où peut-on s’inscrire pour profiter d’E-TAYSIR ?"
+        ],
+        "answer": "Sur les plateformes web des partenaires :\n- Diar Dzair (www.diardzair.dz)\n- ACM (www.taksit.dz)\n- EkiClik (www.alsalamalgeria.ekiclik.dz)\n- Savitem (www.savitem.dz)"
+    },
+    {
+        "questions": [
+            "Quels documents dois-je fournir pour la demande ?",
+            "Quels papiers faut-il fournir pour bénéficier du service E-TAYSIR ?",
+            "Quelles pièces doivent être jointes à la demande de financement E-TAYSIR ?"
+        ],
+        "answer": "Justificatif d’identité (C.N.I biométrique) (2x)\nActe de naissance (2x)\nJustificatif de résidence (-3 mois) (2x)\nChèque CCP barré\nCopie de la carte CHIFFA\nDeux photos\nRelevé de compte\n\nSelon votre catégorie :\n- Marié(e)s : Fiche familiale\n- Salariés : 3 fiches de paie + Attestation de travail récente\n- Retraités : Attestation + RENA\n- Militaires : Présence au corps\n- Retraité militaire : Attestation de radiation\n- Si crédit en cours : copie de l’échéancier"
+    }
+]
