@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot - Réponses</title>
+    <!-- Lien vers le fichier CSS dans le dossier static -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Posez votre question :</h1>
+    <form id="question-form">
+        <input type="text" id="question" name="question" required>
+        <button type="submit">Envoyer</button>
+    </form>
+
+    <h2>Réponse :</h2>
+    <p id="response"></p>
+
+    <script>
+        document.getElementById('question-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var question = document.getElementById('question').value;
+
+            fetch('/ask', {
+                method: 'POST',
+                body: new URLSearchParams('question=' + question),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').innerText = `Réponse : ${data.answer} (Score: ${data.score})`;
+            });
+        });
+    </script>
+</body>
+</html>
