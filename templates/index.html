@@ -4,8 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot - Réponses</title>
-    <!-- Lien vers le fichier CSS dans le dossier static -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .suggestion-button {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .suggestion-button:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
 </head>
 <body>
     <h1>Posez votre question :</h1>
@@ -15,25 +28,51 @@
     </form>
 
     <h2>Réponse :</h2>
-    <p id="response"></p>
+    <div id="response"></div>
 
     <script>
-        document.getElementById('question-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            var question = document.getElementById('question').value;
-
+        function sendQuestion(questionText) {
             fetch('/ask', {
                 method: 'POST',
-                body: new URLSearchParams('question=' + question),
+                body: new URLSearchParams('question=' + questionText),
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 }
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('response').innerText = `Réponse : ${data.answer} (Score: ${data.score})`;
+                const responseDiv = document.getElementById('response');
+                responseDiv.innerHTML = ''; // Nettoyer l'ancienne réponse
+
+                if (data.answer.includes("Vouliez-vous dire")) {
+                    // Suggestions proposées
+                    const parts = data.answer.split("• ");
+                    const intro = document.createElement("p");
+                    intro.textContent = parts[0];
+                    responseDiv.appendChild(intro);
+
+                    parts.slice(1).forEach(suggestion => {
+                        const btn = document.createElement("button");
+                        btn.className = "suggestion-button";
+                        btn.textContent = suggestion.trim();
+                        btn.onclick = () => {
+                            document.getElementById("question").value = suggestion.trim();
+                            sendQuestion(suggestion.trim());
+                        };
+                        responseDiv.appendChild(btn);
+                    });
+
+                } else {
+                    // Réponse directe
+                    responseDiv.innerHTML = `<p>${data.answer}</p><small>Score : ${data.score}</small>`;
+                }
             });
+        }
+
+        document.getElementById('question-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const question = document.getElementById('question').value;
+            sendQuestion(question);
         });
     </script>
 </body>

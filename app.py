@@ -20,16 +20,37 @@ def load_embeddings(embedding_path='embeddings.npy'):
     return np.load(embedding_path)
 
 # Trouver la meilleure réponse
-def get_best_answer(user_question, questions, answers, embeddings, model, threshold=0.5):
+def get_best_answer(user_question, questions, answers, embeddings, model, threshold=0.6, lower_threshold=0.4):
     user_embedding = model.encode([user_question])[0]
-    similarities = np.dot(embeddings, user_embedding)
+
+    # Cosine similarity (more accurate than dot product if embeddings aren't normalized)
+    normalized_embeddings = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)
+    user_embedding = user_embedding / np.linalg.norm(user_embedding)
+    similarities = np.dot(normalized_embeddings, user_embedding)
+
     max_score = similarities.max()
-
-    if max_score < threshold:
-        return "Je ne réponds pas à ce type de question. Peux-tu reformuler ?", max_score
-
     best_index = similarities.argmax()
-    return answers[best_index], max_score
+
+    if max_score >= threshold:
+        return {"type": "answer", "content": answers[best_index], "score": max_score}
+
+    elif lower_threshold <= max_score < threshold:
+        # Obtenir les 3 questions les plus similaires
+        top_indices = similarities.argsort()[-3:][::-1]
+        suggested_questions = [questions[i] for i in top_indices]
+        return {
+            "type": "suggestions",
+            "content": suggested_questions,
+            "score": max_score
+        }
+
+    else:
+        return {
+            "type": "none",
+            "content": "Je ne réponds pas à ce type de question. Peux-tu reformuler ?",
+            "score": max_score
+        }
+
 
 # Initialiser Flask
 app = Flask(__name__)
@@ -47,12 +68,18 @@ def home():
 @app.route('/ask', methods=['POST'])
 def ask():
     user_question = request.form['question']
-    best_answer, score = get_best_answer(user_question, questions, answers, embeddings, model)
-    
-    if best_answer:
-        return jsonify({"answer": best_answer, "score": f"{score:.2f}"})
+    result = get_best_answer(user_question, questions, answers, embeddings, model)
+
+    if result["type"] == "answer":
+        return jsonify({"answer": result["content"], "score": f"{result['score']:.2f}"})
+
+    elif result["type"] == "suggestions":
+        suggestions_text = "Je ne suis pas sûr d'avoir bien compris. Vouliez-vous dire :<br>• " + "<br>• ".join(result["content"])
+        return jsonify({"answer": suggestions_text, "score": f"{result['score']:.2f}"})
+
     else:
-        return jsonify({"answer": "Aucune réponse trouvée", "score": f"{score:.2f}"})
+        return jsonify({"answer": result["content"], "score": f"{result['score']:.2f}"})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
