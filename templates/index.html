@@ -6,6 +6,23 @@
     <title>Chatbot - Réponses</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
+        /* Loader style */
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            display: none; /* Initially hidden */
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .suggestion-button {
             display: inline-block;
             margin: 5px;
@@ -15,6 +32,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .suggestion-button:hover {
             background-color: #d0d0d0;
         }
@@ -27,11 +45,19 @@
         <button type="submit">Envoyer</button>
     </form>
 
+    <!-- Loader element -->
+    <div class="loader" id="loader"></div>
+
     <h2>Réponse :</h2>
     <div id="response"></div>
 
     <script>
         function sendQuestion(questionText) {
+            // Show the loader
+            document.getElementById('loader').style.display = 'block';
+            const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = ''; // Clear any previous response
+
             fetch('/ask', {
                 method: 'POST',
                 body: new URLSearchParams('question=' + questionText),
@@ -41,11 +67,13 @@
             })
             .then(response => response.json())
             .then(data => {
-                const responseDiv = document.getElementById('response');
-                responseDiv.innerHTML = ''; // Nettoyer l'ancienne réponse
+                // Hide the loader
+                document.getElementById('loader').style.display = 'none';
+
+                responseDiv.innerHTML = ''; // Clear previous content
 
                 if (data.answer.includes("Vouliez-vous dire")) {
-                    // Suggestions proposées
+                    // Suggestions proposed
                     const parts = data.answer.split("• ");
                     const intro = document.createElement("p");
                     intro.textContent = parts[0];
@@ -63,9 +91,14 @@
                     });
 
                 } else {
-                    // Réponse directe
+                    // Direct answer
                     responseDiv.innerHTML = `<p>${data.answer}</p><small>Score : ${data.score}</small>`;
                 }
+            })
+            .catch(error => {
+                // Hide the loader if an error occurs
+                document.getElementById('loader').style.display = 'none';
+                responseDiv.innerHTML = "<p>Error fetching answer. Please try again later.</p>";
             });
         }
 
