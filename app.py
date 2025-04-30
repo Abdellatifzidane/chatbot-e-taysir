@@ -83,3 +83,6 @@ def ask():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))  # Obtient le port depuis la variable d'environnement ou utilise 5000 par défaut
+    app.run(host="0.0.0.0", port=port)  # Exécute l'application sur toutes les interfaces réseau disponibles
